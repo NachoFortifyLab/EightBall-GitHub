@@ -122,7 +122,7 @@ jobs:
   # Repository Technology Stack Management Job
   Repository-Technology-Stack-Management:
     # Indicates that this job requieres Get GitHub Repository Data Job to be completed in order to run.
-    needs: Get-GitHub-Repo-Information
+    needs: [Get-GitHub-Repo-Information, Define-Java-Configuration]
     runs-on: ubuntu-latest
     # Saves the data of the technology stack based on the repository language 
     # to be used in the sast scan options, sast scan build packages and java configuration
