@@ -144,6 +144,8 @@ jobs:
       run: |
           echo "Proceeding to define the technology stack of the FOD Application..."
 
+          echo "Language: $Repo_Language"
+
           # Sets the java version which the workflow will use for the SAST Scan
           if [[ $Repo_Language == 'Java' ]]; then
             echo "The repository language is Java, FOD SAST Scan will use Java version $Java_Version to run the scan"
