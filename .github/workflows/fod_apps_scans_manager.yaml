@@ -172,7 +172,7 @@ jobs:
             
             # Sets language level variable to null because the repository language is not a multi version language
             echo "::set-output name=language_level::null"
-            
+      
             # Switchs between the non multi version languages and assigns technology stack id and technology stack values based on the repository language
             case "$Repo_Language" in
               "ABAP")
