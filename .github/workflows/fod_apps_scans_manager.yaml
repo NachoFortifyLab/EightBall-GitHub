@@ -132,6 +132,9 @@ jobs:
       Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
       Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
       Scan_Java_Version: ${{ steps.DefinesFODAppTechStack.outputs.scan_java_version }}
+    if: |
+      ${{ needs.Define-Java-Configuration.result == 'skipped' }} ||
+      ${{ needs.Define-Java-Configuration == 'success' }}
 
     steps:
     # Checks out the source code.
