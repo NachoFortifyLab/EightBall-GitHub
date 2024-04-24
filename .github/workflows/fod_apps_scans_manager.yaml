@@ -164,7 +164,7 @@ jobs:
           fi
           
           # Checks if the repositroy language is not a multi version language
-          if [[ $Repo_Language != 'Java' || $Repo_Language != 'C#' || $Repo_Language != 'Python' ]]; then
+          if [[ $Repo_Language != 'Java' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
             echo "The repository language is not a multi version language"
 
             echo "Language Level and Language Level ID has been saved"
@@ -715,7 +715,7 @@ jobs:
             echo "Proceeding to define the package builder of the FOD Application..."
             
             # Checks if the repository has a language with a builder
-            if [[ $Repo_Language != 'Java' || $Repo_Language != 'C#' || $Repo_Language != 'Python' ]]; then
+            if [[ $Repo_Language != 'Java' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
               echo "The repository language is $Repo_Language which is not a multi version language and has not any builder"
               
               # Saves the repository package build as the output to setup the ScanCentral Client package options for FOD SAST Scan (Default)
