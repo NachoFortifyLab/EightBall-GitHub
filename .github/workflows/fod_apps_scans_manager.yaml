@@ -717,7 +717,7 @@ jobs:
     #   Additional changes to RUN commands will be required to switch to Windows syntax.
     # Indicates that this job requieres FOD Application Management, Repository Technology Stack and
     # Get GitHub Repository Data Jobs to be completed in order to run.
-    needs: [FOD-Application-Management, Repository-Technology-Stack-Management, Get-GitHub-Repo-Information]
+    needs: [FOD-Application-Management, Define-Java-Configuration, Repository-Technology-Stack-Management, Get-GitHub-Repo-Information]
     # This job will run when the boolean variable that checks the existance of the FOD application 
     # returns false or true and when FOD Application Management Job is completed successfully.
     # In Summary this job will run when the FOD Application Management Job is completed succesfully and when the FOD application
