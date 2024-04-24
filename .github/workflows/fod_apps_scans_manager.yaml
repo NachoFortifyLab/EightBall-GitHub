@@ -338,21 +338,58 @@ jobs:
                 ;;
             esac
           else
-            echo "The technology Stack from the repository is .Net/.Net Core/ASP"
+            case "$Repo_Language" in
+              "Java")
+                echo "The technology Stack from the repository is Java"
 
-            echo "Language Level, Technology Stack, Technology Stack ID and Language Level ID has been saved"
+                echo "Technology Stack and Technology Stack ID has been saved"
+                
+                # Sets technology stack id variable dynamically to 2 if the repository is built in Java language
+                echo "::set-output name=tech_stack_id::7"
+                
+                # Sets technology stack variable dynamically to JAVA/J2EE/Kotlin if the repository is built in Java language
+                echo "::set-output name=tech_stack::JAVA/J2EE/Kotlin"
+
+                # Sets language level id variable to the id related to the Java Version from the Application if the repository is built in Java language
+                echo "::set-output name=language_level_id::34"
             
-            # Sets technology stack id variable related to the technology stack of the repository
-            echo "::set-output name=tech_stack_id::1"
+                # Sets language level variable to the Java Version from the Application if the repository is built in Java language
+                echo "::set-output name=language_level::$Java_Version"
+                ;;
+              "C#")
+                echo "The technology Stack from the repository is .Net/.Net Core/ASP"
+
+                echo "Language Level, Technology Stack, Technology Stack ID and Language Level ID has been saved"
             
-            # Sets technology stack variable dynamically related to the technology stack of the repository
-            echo "::set-output name=tech_stack::.NET"
+                # Sets technology stack id variable to 1 if the repository is build in Python language
+                echo "::set-output name=tech_stack_id::1"
             
-            # Sets language level id variable related to the technology stack of the repository
-            echo "::set-output name=language_level_id::2"
+                # Sets technology stack variable dynamically related to .NET if the repository is build in Python language
+                echo "::set-output name=tech_stack::.NET"
             
-            # Sets language level variable related to the technology stack of the repository
-            echo "::set-output name=language_level::2.0"
+                # Sets language level id variable to 2 if the repository is build in Python language
+                echo "::set-output name=language_level_id::2"
+            
+                # Sets language level variable to 2.0 if the repository is build in Python language
+                echo "::set-output name=language_level::2.0"
+                ;;
+              "Python")
+                echo "The technology Stack from the repository is ColdFusion"
+
+                echo "Technology Stack and Technology Stack ID has been saved"
+                
+                # Sets technology stack id variable dynamically to 5 if the repository is build in Python language
+                echo "::set-output name=tech_stack_id::5"
+              
+                # Sets technology stack variable dynamically to CFML if the repository is build in Python language
+                echo "::set-output name=tech_stack::CFML"
+                ;;
+              *)
+                echo "Language not found on Fortify On Demand technology stack options"
+
+                exit 1  # Exit with a non-zero status code to indicate failure
+                ;;
+            esac  
           fi
       env: 
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
@@ -742,7 +779,7 @@ jobs:
                   else 
                     echo "the Java appplication has an unknown java build or has not any build at all"
                 
-                    echo "::set-output name=repo_package_build::none"
+                    exit 1  # Exit with a non-zero status code to indicate failure
                   fi
                   ;;
                 "Python")
