@@ -761,7 +761,7 @@ jobs:
               # Switchs between the multi version languages and assigns language version and package builder based on the repository language
               case "$Repo_Language" in
                 "Java")
-                  echo "The repository language is: Java version $Java Version"
+                  echo "The repository language is: Java version $Java_Version"
 
                   echo "Proceeding to check if the repository has a java builder..."
                   
