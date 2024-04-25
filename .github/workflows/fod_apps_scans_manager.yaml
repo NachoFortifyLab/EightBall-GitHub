@@ -802,10 +802,10 @@ jobs:
             fi
         env:
           Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
-          Java_Version: ${{ needs.java_info.outputs.Java_Version }}
-          Is_Gradle: ${{ needs.java_info.outputs.Is_Gradle }}
-          Is_Maven: ${{ needs.java_info.outputs.Is_Maven }}
-          Builder_Name: ${{ needs.java_info.outputs.Builder_Name }}
+          Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
+          Is_Gradle: ${{ needs.Define-Java-Configuration.outputs.Is_Gradle }}
+          Is_Maven: ${{ needs.Define-Java-Configuration.outputs.Is_Maven }}
+          Builder_Name: ${{ needs.Define-Java-Configuration.outputs.Builder_Name }}
           
       # Set ups Java because is required to run some Fortify utilities.
       # When scanning a Java application, it will use the Java version which your application is built.
