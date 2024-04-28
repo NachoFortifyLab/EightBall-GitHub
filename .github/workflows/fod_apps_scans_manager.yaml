@@ -146,14 +146,15 @@ jobs:
           echo "Proceeding to define the java version to be used in the Fortify Tasks..."
           
           # Sets the java version which the workflow will use for the SAST Scan
-          if [[ $Repo_Language == 'Java' ]]; then
-            echo "The repository language is Java, FOD SAST Scan will use Java version $Java_Version to run the scan"
+          if [[ $Repo_Language == 'Java' || $Repo_Language == 'Kotlin' || $Repo_Language == 'J2EE' ]]; then
+            echo "The repository language is $Repo_Language, FOD SAST Scan will use Java version $Java_Version to run the scan"
+            
             echo "FOD Scan java version has been saved"
             
             # Saves the scan java version as the output to be used for the FOD SAST Scan (Java repository)
             echo "::set-output name=scan_java_version::$Java_Version"
           else
-            echo "The repository language is not Java, FOD SAST Scan will use the default Java version to run the scan"
+            echo "The repository language is not Java nor Kotlin nor J2EE, FOD SAST Scan will use the default Java version to run the scan"
             echo "FOD Scan java version has been saved"
             
             # Saves the scan java version as the output to be used for the FOD SAST Scan (Default for none Java repositories)
@@ -171,7 +172,7 @@ jobs:
           echo "Proceeding to define the technology stack of the FOD Application..."
           
           # Checks if the repositroy language is not a multi version language
-          if [[ $Repo_Language != 'Java' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
+          if [[ $Repo_Language != 'Java' && $Repo_Language == 'Kotlin' && $Repo_Language == 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
             echo "The repository language is not a multi version language"
 
             echo "Language Level and Language Level ID have been saved"
@@ -346,22 +347,16 @@ jobs:
             esac
           else
             case "$Repo_Language" in
-              "Java")
-                echo "The technology Stack from the repository is Java"
+              "Java" | "J2EE" | "Kotlin")
+                echo "The technology Stack from the repository is $Repo_Language"
 
-                echo "Technology Stack, Technology Stack ID, language level id and language level have been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 2 if the repository is built in Java language
                 echo "::set-output name=tech_stack_id::7"
                 
                 # Sets technology stack variable dynamically to JAVA/J2EE/Kotlin if the repository is built in Java language
                 echo "::set-output name=tech_stack::JAVA/J2EE/Kotlin"
-
-                # Sets language level id variable to the id related to the Java Version from the Application if the repository is built in Java language
-                echo "::set-output name=language_level_id::34"
-            
-                # Sets language level variable to the Java Version from the Application if the repository is built in Java language
-                echo "::set-output name=language_level::$Java_Version"
                 ;;
               "C#")
                 echo "The technology Stack from the repository is .Net/.Net Core/ASP"
@@ -381,7 +376,7 @@ jobs:
                 echo "::set-output name=language_level::2.0"
                 ;;
               "Python")
-                echo "The technology Stack from the repository is ColdFusion"
+                echo "The technology Stack from the repository is Python"
 
                 echo "Technology Stack and Technology Stack ID has been saved"
                 
@@ -402,7 +397,117 @@ jobs:
         # Environment variables for this step
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
+
+    # Defines the Java Version to be used for Fortify Tasks
+    - name: Defines Java Application Language Level and Language Level ID
+      id: DefinesMultiLanguageLevelID
+      if: | 
+         ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Java' }} ||
+         ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Kotlin' }} ||
+         ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'J2EE' }} ||
+      run: |
+          echo "Proceeding to define $Repo_Language Language Level and ID of the FOD Application..."
+          
+          case "$Java_Version" in
+            "8")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::12"
             
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::1.8"
+              ;;
+            "9")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::17"
+            
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::1.9"
+              ;;
+            "10")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::19"
+            
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::$Java_Version"
+              ;;
+            "11")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::20"
+            
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::$Java_Version"
+              ;;
+            "12")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::21"
+            
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::$Java_Version"
+              ;;
+            "13")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::22"
+            
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::$Java_Version"
+              ;;
+            "14")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::31"
+            
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::$Java_Version"
+              ;;
+            "17")
+              echo "Java version is $Java_Version"
+
+              echo "Language Level and Language Level ID have been saved"
+              
+              # Sets language level id dynamically to the value related to the Java Version from the application of the repository
+              echo "::set-output name=language_level_id::34"
+            
+              # Sets language level dynamically to the Java Version from the application of the repository
+              echo "::set-output name=language_level::$Java_Version"
+              ;;
+            *)
+              echo "Java Version $Java_Version not found on Fortify On Demand language level options"
+
+              exit 1  # Exit with a non-zero status code to indicate failure
+              ;;
+          esac
+      env: 
+        # Environment variables for this step
+        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
+        Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
+      
   # FOD Application Management Job
   FOD-Application-Management:
     # Indicates that this job requieres Repository Technology Stack Management Job to be completed in order to run
@@ -663,7 +768,8 @@ jobs:
             "languageLevel": $Language_Level,
             "performOpenSourceAnalysis": false,
             "auditPreferenceType": 2,
-            "includeThirdPartyLibraries": false
+            "includeThirdPartyLibraries": false,
+            "useSourceControl": true,
           }
           EOF
           )
@@ -888,5 +994,5 @@ jobs:
       - name: Imports Fortify On Demand SAST Scan Results on GitHub Security Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
-          # .sarif file that will get imported the FOD sast scan results in GitHub Security Code Scanning 
+          # .sarif file that will import the FOD sast scan results in GitHub Security Code Scanning 
           sarif_file: ./gh-fortify-sast.sarif
