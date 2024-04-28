@@ -132,45 +132,33 @@ jobs:
       Technology_Stack: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack }}
       Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
       Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
-      Scan_Java_Version: ${{ steps.DefinesJavaVersionFortifyTasks.outputs.scan_java_version }}
+      Scan_Java_Version: ${{ steps.DefinesFODAppTechStack.outputs.scan_java_version }}
 
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
       uses: actions/checkout@v2
 
-    # Defines the Java Version to be used for the Fortify Tasks
-    - name: Defines Java Version for Fortify Tasks
-    - id: DefinesJavaVersionFortifyTasks
-      run: |
-          echo "Proceeding to define the Java Version of the Fortify Tasks..."
-
-          # Sets the java version which the workflow will use for the SAST Scan
-          if [[ $Repo_Language == 'Java' ]]; then
-            echo "The repository language is Java, FOD SAST Scan will use Java version $Java_Version to run the scan"
-
-            echo "FOD Scan java version has been saved"
-            
-            # Saves the scan java version as the output to be used for the FOD SAST Scan (Java version used in your code from the repository)
-            echo "::set-output name=scan_java_version::$Java_Version"
-          else
-            echo "The repository language is not Java, FOD SAST Scan will use the default Java version to run the scan"
-
-            echo "FOD Scan java version has been saved"
-            
-            # Saves the scan java version as the output to be used for the FOD SAST Scan (Default for none Java repositories)
-            echo "::set-output name=scan_java_version::8"
-          fi
-      env:
-        # Environment variables for this step
-        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
-        Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
-
     # Defines FOD Application Technology Stack based on the language of the repository
     - name: Defines FOD Application Technology Stack
       id: DefinesFODAppTechStack
       run: |
           echo "Proceeding to define the technology stack of the FOD Application..."
+
+          # Sets the java version which the workflow will use for the SAST Scan
+          if [[ $Repo_Language == 'Java' ]]; then
+            echo "The repository language is Java, FOD SAST Scan will use Java version $Java_Version to run the scan"
+            echo "FOD Scan java version has been saved"
+            
+            # Saves the scan java version as the output to be used for the FOD SAST Scan (Java repository)
+            echo "::set-output name=scan_java_version::$Java_Version"
+          else
+            echo "The repository language is not Java, FOD SAST Scan will use the default Java version to run the scan"
+            echo "FOD Scan java version has been saved"
+            
+            # Saves the scan java version as the output to be used for the FOD SAST Scan (Default for none Java repositories)
+            echo "::set-output name=scan_java_version::8"
+          fi
           
           # Checks if the repositroy language is not a multi version language
           if [[ $Repo_Language != 'Java' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
