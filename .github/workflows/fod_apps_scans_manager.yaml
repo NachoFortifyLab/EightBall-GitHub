@@ -36,7 +36,7 @@ jobs:
   # Get GitHub Repository Data Job
   Get-GitHub-Repo-Information:
     runs-on: ubuntu-latest
-    # Saves the data of the repository language to be used in other jobs
+    # Saves the data of the repository language to be used in the next jobs
     outputs:
       Repo_Language: ${{ steps.RepoInfo.outputs.repo_language }}
 
@@ -75,14 +75,15 @@ jobs:
           # Saves the repository information as the output of the current step to be used in next steps
           echo "::set-output name=repo_language::$LANGUAGE"
       env:
+        # Environment variables for this step
         REPO_API_URL: "https://api.github.com/repos/${{ github.repository }}"
         
   # Defines Java Configuration Job
   Define-Java-Configuration:
-    # Indicates that this job requieres Get GitHub Repository Data Job to be completed in order to run.
+    # Indicates that this job requieres Get GitHub Repository Data Job to be completed in order to run
     needs: Get-GitHub-Repo-Information
     runs-on: ubuntu-latest
-    # Saves the java version, the builder data and builder name to be used in other jobs
+    # Saves the java version, the builder data and builder name to be used in the sast scan options and java configuration steps
     outputs:
       Java_Version: ${{ steps.java_info.outputs.java_version }}
       Is_Gradle: ${{ steps.java_info.outputs.is_gradle }}
@@ -121,30 +122,28 @@ jobs:
           
   # Repository Technology Stack Management Job
   Repository-Technology-Stack-Management:
-    # Indicates that this job requieres Get GitHub Repository Data Job to be completed in order to run.
+    # Indicates that this job requieres Get GitHub Repository Data Job to be completed in order to run
     needs: [Get-GitHub-Repo-Information, Define-Java-Configuration]
     runs-on: ubuntu-latest
     # Saves the data of the technology stack based on the repository language 
-    # to be used in the sast scan options, sast scan build packages and java configuration
+    # to be used in the sast scan options, sast scan build packages and java configuration steps
     outputs:
       Technology_Stack_ID: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack_id }}
       Technology_Stack: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack }}
       Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
       Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
-      Scan_Java_Version: ${{ steps.DefinesFODAppTechStack.outputs.scan_java_version }}
+      Scan_Java_Version: ${{ steps.DefinesJavaVersionFortifyTasks.outputs.scan_java_version }}
 
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
       uses: actions/checkout@v2
 
-    # Defines FOD Application Technology Stack based on the language of the repository
-    - name: Defines FOD Application Technology Stack
-      id: DefinesFODAppTechStack
+    # Defines the Java Version to be used for the Fortify Tasks
+    - name: Defines Java Version for Fortify Tasks
+    - id: DefinesJavaVersionFortifyTasks
       run: |
-          echo "Proceeding to define the technology stack of the FOD Application..."
-
-          echo "Language: $Repo_Language"
+          echo "Proceeding to define the Java Version of the Fortify Tasks..."
 
           # Sets the java version which the workflow will use for the SAST Scan
           if [[ $Repo_Language == 'Java' ]]; then
@@ -152,7 +151,7 @@ jobs:
 
             echo "FOD Scan java version has been saved"
             
-            # Saves the scan java version as the output to be used for the FOD SAST Scan (Java repository)
+            # Saves the scan java version as the output to be used for the FOD SAST Scan (Java version used in your code from the repository)
             echo "::set-output name=scan_java_version::$Java_Version"
           else
             echo "The repository language is not Java, FOD SAST Scan will use the default Java version to run the scan"
@@ -162,6 +161,16 @@ jobs:
             # Saves the scan java version as the output to be used for the FOD SAST Scan (Default for none Java repositories)
             echo "::set-output name=scan_java_version::8"
           fi
+      env:
+        # Environment variables for this step
+        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
+        Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
+
+    # Defines FOD Application Technology Stack based on the language of the repository
+    - name: Defines FOD Application Technology Stack
+      id: DefinesFODAppTechStack
+      run: |
+          echo "Proceeding to define the technology stack of the FOD Application..."
           
           # Checks if the repositroy language is not a multi version language
           if [[ $Repo_Language != 'Java' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
@@ -180,7 +189,7 @@ jobs:
               "ABAP")
                 echo "The technology Stack from the repository is ABAP"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 2 if the repository is build in ABAP language
                 echo "::set-output name=tech_stack_id::2"
@@ -191,7 +200,7 @@ jobs:
               "Apex")
                 echo "The technology Stack from the repository is Apex/VisualForce"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 21 if the repository is build in Apex language
                 echo "::set-output name=tech_stack_id::21"
@@ -202,7 +211,7 @@ jobs:
               "ColdFusion")
                 echo "The technology Stack from the repository is ColdFusion"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 5 if the repository is build in ColdFusion language
                 echo "::set-output name=tech_stack_id::5"
@@ -213,7 +222,7 @@ jobs:
               "COBOL")
                 echo "The technology Stack from the repository is COBOL"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 6 if the repository is build in ColdFusion language
                 echo "::set-output name=tech_stack_id::6"
@@ -224,7 +233,7 @@ jobs:
               "Dart")
                 echo "The technology Stack from the repository is Dart"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 29 if the repository is build in Dart language
                 echo "::set-output name=tech_stack_id::29"
@@ -235,7 +244,7 @@ jobs:
               "Go")
                 echo "The technology Stack from the repository is Go"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 22 if the repository is build in Go language
                 echo "::set-output name=tech_stack_id::22"
@@ -246,7 +255,7 @@ jobs:
               "Dockerfile")
                 echo "The technology Stack from the repository is Dockerfile"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 27 if the repository is build in Dockerfile language
                 echo "::set-output name=tech_stack_id::27"
@@ -257,7 +266,7 @@ jobs:
               "HTML" | "JavaScript" | "TypeScript")
                 echo "The technology Stack from the repository is JS/TS/HTML"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 16 if the repository is build in JS or TS or HTML languages
                 echo "::set-output name=tech_stack_id::16"
@@ -268,7 +277,7 @@ jobs:
               "C" | "C++" | "Scala")
                 echo "The technology Stack from the repository is MBS/C/C++/Scala"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 16 if the repository is build in MBS or C or C++ or Scala languages
                 echo "::set-output name=tech_stack_id::16"
@@ -279,7 +288,7 @@ jobs:
               "PHP")
                 echo "The technology Stack from the repository is PHP"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 9 if the repository is build in PHP language
                 echo "::set-output name=tech_stack_id::9"
@@ -290,7 +299,7 @@ jobs:
               "Ruby")
                 echo "The technology Stack from the repository is Ruby"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 17 if the repository is build in Ruby language
                 echo "::set-output name=tech_stack_id::17"
@@ -301,7 +310,7 @@ jobs:
               "Solidity")
                 echo "The technology Stack from the repository is Solidity"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 31 if the repository is build in Solidity language
                 echo "::set-output name=tech_stack_id::31"
@@ -312,7 +321,7 @@ jobs:
               "Visual Basic 6.0")
                 echo "The technology Stack from the repository is Visual Basic 6.0"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 11 if the repository is build in Visual Basic 6.0 language
                 echo "::set-output name=tech_stack_id::11"
@@ -323,7 +332,7 @@ jobs:
               "VBScript")
                 echo "The technology Stack from the repository is Visual Basic Script"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack and Technology Stack ID have been saved"
                 
                 # Sets technology stack id variable dynamically to 14 if the repository is build in Visual Basic Script language
                 echo "::set-output name=tech_stack_id::14"
@@ -342,7 +351,7 @@ jobs:
               "Java")
                 echo "The technology Stack from the repository is Java"
 
-                echo "Technology Stack and Technology Stack ID has been saved"
+                echo "Technology Stack, Technology Stack ID, language level id and language level have been saved"
                 
                 # Sets technology stack id variable dynamically to 2 if the repository is built in Java language
                 echo "::set-output name=tech_stack_id::7"
@@ -359,7 +368,7 @@ jobs:
               "C#")
                 echo "The technology Stack from the repository is .Net/.Net Core/ASP"
 
-                echo "Language Level, Technology Stack, Technology Stack ID and Language Level ID has been saved"
+                echo "Language Level, Technology Stack, Technology Stack ID and Language Level ID have been saved"
             
                 # Sets technology stack id variable to 1 if the repository is build in Python language
                 echo "::set-output name=tech_stack_id::1"
@@ -392,17 +401,18 @@ jobs:
             esac  
           fi
       env: 
+        # Environment variables for this step
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
             
   # FOD Application Management Job
   FOD-Application-Management:
-    # Indicates that this job requieres Repository Technology Stack Management Job to be completed in order to run.
+    # Indicates that this job requieres Repository Technology Stack Management Job to be completed in order to run
     needs: Repository-Technology-Stack-Management
     runs-on: ubuntu-latest
     # Saves the data of the FOD Release ID and a boolean variable that 
     # checks the existance of the FOD application (returns false if an application with the repository name
-    # if is not found and returns true if the application exists) as output to be used in other jobs.
+    # if is not found and returns true if the application exists) as output to be used in the sast scan options and sast scan steps
     outputs:
       FOD_Release_ID: ${{ steps.FODAppManagement.outputs.releaseID }}
       Is_FOD_APP_Exists: ${{ steps.FODAppManagement.outputs.isFODAppExists }}
@@ -609,6 +619,7 @@ jobs:
             exit 1  # Exit with a non-zero status code to indicate failure
           fi
       env:
+        # Environment variables for this step
         FOD_API_URL: "${{ secrets.FOD_API_URL }}"
         FOD_API_TOKEN: "${{ secrets.FOD_BEARER_TOKEN }}"
         Repo_Name: "${{ github.event.repository.name }}"
@@ -617,10 +628,11 @@ jobs:
 
   # FOD SAST Scan Options Job
   FOD-SAST-Scan-Options:
-    # Indicates that this job requieres FOD Application Management and Repository Technology Stack Management Jobs to be completed in order to run.
+    # Indicates that this job requieres FOD Application Management and Repository Technology Stack Management Jobs to be completed in order to run
     needs: [FOD-Application-Management, Repository-Technology-Stack-Management]
     runs-on: ubuntu-latest
-    # This job will run when the boolean variable that checks the existance of the FOD application returns false (hence if the fod application is a new one).
+    # This job will run when the boolean variable that checks the existance of the FOD application 
+    # returns false (hence if the fod application is a new one)
     if: ${{ needs.FOD-Application-Management.outputs.Is_FOD_APP_Exists == 'false' }}
          
     steps:
@@ -698,6 +710,7 @@ jobs:
             exit 1  # Exit with a non-zero status code to indicate failure
           fi
       env:
+        # Environment variables for this step
         FOD_API_URL: "${{ secrets.FOD_API_URL }}"
         FOD_API_TOKEN: "${{ secrets.FOD_BEARER_TOKEN }}"
         Repo_Name: "${{ github.event.repository.name }}"
@@ -801,6 +814,7 @@ jobs:
               esac
             fi
         env:
+          # Environment variables for this step
           Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
           Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
           Is_Gradle: ${{ needs.Define-Java-Configuration.outputs.Is_Gradle }}
@@ -832,6 +846,7 @@ jobs:
       - name: Package Code + Dependencies
         run: scancentral package $PACKAGE_OPTS -o package.zip
         env:
+          # Environment variables for this step
           PACKAGE_OPTS: "-bt ${{ steps.DefinesFODAppPackageBuilder.outputs.repo_package_build }}"
 
       # Starts Fortify on Demand SAST Scan and wait until results completition. 
@@ -846,6 +861,7 @@ jobs:
       - name: Performs a FOD SAST Scan on the FOD Application assigned to this Repository
         run: java -jar $FOD_UPLOAD_JAR -z package.zip -aurl $FOD_API_URL -purl $FOD_URL -rid "$FOD_RELEASE_ID" -tc "$FOD_TENANT" -uc "$FOD_USER" "$FOD_PAT" $FOD_UPLOADER_OPTS -n "$FOD_UPLOADER_NOTES"
         env:
+          # Environment variables for this step
           FOD_URL: "${{ secrets.FOD_URL }}"
           FOD_API_URL: "${{ secrets.FOD_API_BASE_URL }}"
           FOD_TENANT: ${{ secrets.FOD_TENANT }}
@@ -860,17 +876,19 @@ jobs:
       #   Credentials and Email should be obtained from your FOD tenant (either Personal Access Token or API Key can be used).
       #   FOD Tenant is the Tenant you use.
       #   FOD Release ID is obtained as output from the FOD Application Management Job.
-      - name: Exports Fortify On Demand Results to GitHub-optimized SARIF
+      - name: Exports Fortify On Demand SAST Scan Results to GitHub-optimized SARIF
         uses: fortify/gha-export-vulnerabilities@fcb374411cff9809028c911dabb8b57dbdae623b
         with:
+          # Environment variables for this step
           fod_base_url: "${{ secrets.FOD_URL }}"
           fod_tenant: ${{ secrets.FOD_TENANT }}
           fod_user: ${{ secrets.FOD_USER }}
           fod_password: ${{ secrets.FOD_PAT }}
           fod_release_id: ${{ needs.FOD-Application-Management.outputs.FOD_Release_ID }}
           
-      # Imports Fortify on Demand results to GitHub Security Code Scanning where you can review the issues
-      - name: Imports Fortify On Demand Results on GitHub Security Code Scanning
+      # Imports Fortify on Demand scan results to GitHub Security Code Scanning where you can review the issues
+      - name: Imports Fortify On Demand SAST Scan Results on GitHub Security Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
+          # .sarif file that will get imported the FOD sast scan results in GitHub Security Code Scanning 
           sarif_file: ./gh-fortify-sast.sarif
