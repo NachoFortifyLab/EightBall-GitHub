@@ -133,7 +133,9 @@ jobs:
       Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
       Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
       Scan_Java_Version: ${{ steps.DefinesJavaVersionFortifyTasks.outputs.scan_java_version }}
-
+      Multi_Language_Level_ID: ${{ steps.DefinesMultiLanguageLevelID.outputs.multi_language_level_id }}
+      Multi_Language_Level: ${{ steps.DefinesMultiLanguageLevelID.outputs.multi_language_level }}
+      
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
@@ -172,7 +174,7 @@ jobs:
           echo "Proceeding to define the technology stack of the FOD Application..."
           
           # Checks if the repositroy language is not a multi version language
-          if [[ $Repo_Language != 'Java' && $Repo_Language == 'Kotlin' && $Repo_Language == 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
+          if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
             echo "The repository language is not a multi version language"
 
             echo "Language Level and Language Level ID have been saved"
@@ -406,7 +408,7 @@ jobs:
          ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Kotlin' }} ||
          ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'J2EE' }} ||
       run: |
-          echo "Proceeding to define $Repo_Language Language Level and ID of the FOD Application..."
+          echo "Proceeding to define $Repo_Language version $Java_Version Language Level and ID of the FOD Application..."
           
           case "$Java_Version" in
             "8")
@@ -415,10 +417,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::12"
+              echo "::set-output name=multi_language_level_id::12"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::1.8"
+              echo "::set-output name=multi_language_level::1.8"
               ;;
             "9")
               echo "Java version is $Java_Version"
@@ -426,10 +428,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::17"
+              echo "::set-output name=multi_language_level_id::17"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::1.9"
+              echo "::set-output name=multi_language_level::1.9"
               ;;
             "10")
               echo "Java version is $Java_Version"
@@ -437,10 +439,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::19"
+              echo "::set-output name=multi_language_level_id::19"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::$Java_Version"
+              echo "::set-output name=multi_language_level::$Java_Version"
               ;;
             "11")
               echo "Java version is $Java_Version"
@@ -448,10 +450,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::20"
+              echo "::set-output name=multi_language_level_id::20"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::$Java_Version"
+              echo "::set-output name=multi_language_level::$Java_Version"
               ;;
             "12")
               echo "Java version is $Java_Version"
@@ -459,10 +461,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::21"
+              echo "::set-output name=multi_language_level_id::21"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::$Java_Version"
+              echo "::set-output name=multi_language_level::$Java_Version"
               ;;
             "13")
               echo "Java version is $Java_Version"
@@ -470,10 +472,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::22"
+              echo "::set-output name=multi_language_level_id::22"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::$Java_Version"
+              echo "::set-output name=multi_language_level::$Java_Version"
               ;;
             "14")
               echo "Java version is $Java_Version"
@@ -481,10 +483,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::31"
+              echo "::set-output name=multi_language_level_id::31"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::$Java_Version"
+              echo "::set-output name=multi_language_level::$Java_Version"
               ;;
             "17")
               echo "Java version is $Java_Version"
@@ -492,10 +494,10 @@ jobs:
               echo "Language Level and Language Level ID have been saved"
               
               # Sets language level id dynamically to the value related to the Java Version from the application of the repository
-              echo "::set-output name=language_level_id::34"
+              echo "::set-output name=multi_language_level_id::34"
             
               # Sets language level dynamically to the Java Version from the application of the repository
-              echo "::set-output name=language_level::$Java_Version"
+              echo "::set-output name=multi_language_level::$Java_Version"
               ;;
             *)
               echo "Java Version $Java_Version not found on Fortify On Demand language level options"
@@ -750,10 +752,21 @@ jobs:
     #   User ID should be obtained from a GET API request to get users list operation at https://api.ams.fortify.com/swagger/ui/index#!/Users/UsersV3_GetUsers.
     #   FOD Release ID is obtained as output from the FOD Application Management Job.
     #   Read fod_apps_scans_manager documentation for more details about how to update the values to be used in the JSON scan options from the application body.
-    - name:  Setups FOD Static Scan Options for the new Application created
+    - name: Setups FOD Static Scan Options for the new Application created
       id: FODAppSastScanOptions
       run: |
           echo "Proceeding to set up the sast scan options for your ${Repo_Name} Application in Fortify On Demand..."
+
+          # Checks if the repositroy language is not a multi version language
+          if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
+            $Language_Level_ID=$Multi_Language_Level_ID
+            
+            $Language_Level=$Multi_Language_Level
+          else
+            $Language_Level_ID=$Language_Level_ID
+            
+            $Language_Level=$Language_Level
+          fi
           
           # Creates a JSON file to be used as body for the Set Up of the SAST Scan options 
           Save_FOD_Application_Static_Scan_Options_Body=$(cat <<-EOF
@@ -820,12 +833,14 @@ jobs:
         Repo_Name: "${{ github.event.repository.name }}"
         FOD_USER_ID: "${{ secrets.FOD_USER_ID }}"
         FOD_EMAIL: "${{ secrets.FOD_EMAIL }}"
-        Repo_Language: ${{ needs.RepoInfo.outputs.Repo_Language }}
+        Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         FOD_RELEASE_ID: ${{ needs.FOD-Application-Management.outputs.FOD_Release_ID }}
         Technology_Stack_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack_ID }}
         Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
         Language_Level_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Language_Level_ID }}
         Language_Level: ${{ needs.Repository-Technology-Stack-Management.outputs.Language_Level }}
+        Multi_Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level_id }}
+        Multi_Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level }}
           
   # FOD SAST Scan Job
   FOD-SAST-Scan:
