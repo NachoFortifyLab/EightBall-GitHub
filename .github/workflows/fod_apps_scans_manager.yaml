@@ -521,6 +521,10 @@ jobs:
             echo "Repository language is: $Repo_Language"
 
             echo "Language Level and Language Level ID have been saved"
+
+            echo "Language Level ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}"
+
+            echo "Language Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}"
             
             echo "::set-output name=language_level_id::${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}"
             
@@ -529,6 +533,10 @@ jobs:
             echo "Repository language is: $Repo_Language"
 
             echo "Language Level and Language Level ID have been saved"
+
+            echo "Language Level ID: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
+
+            echo "Language Level: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}"
             
             echo "::set-output name=language_level_id::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
             
