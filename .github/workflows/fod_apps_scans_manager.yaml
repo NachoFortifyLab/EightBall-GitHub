@@ -774,7 +774,7 @@ jobs:
               "performOpenSourceAnalysis": false,
               "auditPreferenceType": 2,
               "includeThirdPartyLibraries": false,
-              "useSourceControl": true,
+              "useSourceControl": true
             }
             EOF
             )
@@ -795,7 +795,7 @@ jobs:
               "performOpenSourceAnalysis": false,
               "auditPreferenceType": 2,
               "includeThirdPartyLibraries": false,
-              "useSourceControl": true,
+              "useSourceControl": true
             }
             EOF
             )
