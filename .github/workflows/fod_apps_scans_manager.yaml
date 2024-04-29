@@ -787,7 +787,7 @@ jobs:
 
           echo "Language Level ID: $Language_Level_ID"
 
-          echo "Language Leve: $Language_Level"
+          echo "Language Level: $Language_Level"
           
           # Creates a JSON file to be used as body for the Set Up of the SAST Scan options 
           Save_FOD_Application_Static_Scan_Options_Body=$(cat <<-EOF
@@ -858,8 +858,8 @@ jobs:
         FOD_RELEASE_ID: ${{ needs.FOD-Application-Management.outputs.FOD_Release_ID }}
         Technology_Stack_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack_ID }}
         Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
-        Language_Level_ID: ${{ steps.LanguageLevelIDChecker.outputs.language_level_id }}
-        Language_Level: ${{ steps.LanguageLevelIDChecker.outputs.language_level }}
+        Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.language_level_id }}
+        Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.language_level }}
         #Multi_Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level_id }}
         #Multi_Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level }}
           
