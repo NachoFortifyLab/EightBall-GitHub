@@ -780,10 +780,14 @@ jobs:
     #   User ID should be obtained from a GET API request to get users list operation at https://api.ams.fortify.com/swagger/ui/index#!/Users/UsersV3_GetUsers.
     #   FOD Release ID is obtained as output from the FOD Application Management Job.
     #   Read fod_apps_scans_manager documentation for more details about how to update the values to be used in the JSON scan options from the application body.
-    - name:  Setups FOD Static Scan Options for the new Application created
+    - name: Setups FOD Static Scan Options for the new Application created
       id: FODAppSastScanOptions
       run: |
           echo "Proceeding to set up the sast scan options for your ${Repo_Name} Application in Fortify On Demand..."
+
+          echo "Language Level ID: $Language_Level_ID"
+
+          echo "Language Leve: $Language_Level"
           
           # Creates a JSON file to be used as body for the Set Up of the SAST Scan options 
           Save_FOD_Application_Static_Scan_Options_Body=$(cat <<-EOF
@@ -854,8 +858,8 @@ jobs:
         FOD_RELEASE_ID: ${{ needs.FOD-Application-Management.outputs.FOD_Release_ID }}
         Technology_Stack_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack_ID }}
         Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
-        Language_Level_ID: ${{ steps.LanguageLevelIDChecker.outputs.Language_Level_ID }}
-        Language_Level: ${{ steps.LanguageLevelIDChecker.outputs.Language_Level }}
+        Language_Level_ID: ${{ steps.LanguageLevelIDChecker.outputs.language_level_id }}
+        Language_Level: ${{ steps.LanguageLevelIDChecker.outputs.language_level }}
         #Multi_Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level_id }}
         #Multi_Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level }}
           
