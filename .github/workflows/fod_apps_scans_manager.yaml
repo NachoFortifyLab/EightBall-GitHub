@@ -530,7 +530,7 @@ jobs:
 
             echo "Language Level and Language Level ID have been saved"
             
-            echo "::set-output name=language_level::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
+            echo "::set-output name=language_level_id::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
             
             echo "::set-output name=language_level::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}"
           fi
@@ -858,8 +858,8 @@ jobs:
         FOD_RELEASE_ID: ${{ needs.FOD-Application-Management.outputs.FOD_Release_ID }}
         Technology_Stack_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack_ID }}
         Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
-        Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.language_level_id }}
-        Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.language_level }}
+        Language_Level_ID: ${{ steps.LanguageLevelIDChecker.outputs.language_level_id }}
+        Language_Level: ${{ steps.LanguageLevelIDChecker.outputs.language_level }}
         #Multi_Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level_id }}
         #Multi_Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level }}
           
