@@ -757,35 +757,46 @@ jobs:
       run: |
           echo "Proceeding to set up the sast scan options for your ${Repo_Name} Application in Fortify On Demand..."
 
-          # Checks if the repositroy language is not a multi version language
+          # Checks if the repository language is not a multi version language
           if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
-            $Language_Level_ID=$Multi_Language_Level_ID
-            
-            $Language_Level=$Multi_Language_Level
+            # Creates a JSON file to be used as body for the Set Up of the SAST Scan options (a non multiversion language)
+            Save_FOD_Application_Static_Scan_Options_Body=$(cat <<-EOF
+            {
+              "assessmentTypeId": 274,
+              "entitlementId": 12880,
+              "entitlementFrequencyType": 2,
+              "releaseId": $FOD_Release_ID,
+              "technologyStackId": $Technology_Stack_ID,
+              "technologyStack": "$Technology_Stack",
+              "languageLevelId": $Language_Level_ID,
+              "languageLevel": $Language_Level,
+              "performOpenSourceAnalysis": false,
+              "auditPreferenceType": 2,
+              "includeThirdPartyLibraries": false,
+              "useSourceControl": true,
+            }
+            EOF
+            )
           else
-            $Language_Level_ID=$Language_Level_ID
-            
-            $Language_Level=$Language_Level
+            # Creates a JSON file to be used as body for the Set Up of the SAST Scan options (multiversion language)
+            Save_FOD_Application_Static_Scan_Options_Body=$(cat <<-EOF
+            {
+              "assessmentTypeId": 274,
+              "entitlementId": 12880,
+              "entitlementFrequencyType": 2,
+              "releaseId": $FOD_Release_ID,
+              "technologyStackId": $Technology_Stack_ID,
+              "technologyStack": "$Technology_Stack",
+              "languageLevelId": $Multi_Language_Level_ID,
+              "languageLevel": $Multi_Language_Level,
+              "performOpenSourceAnalysis": false,
+              "auditPreferenceType": 2,
+              "includeThirdPartyLibraries": false,
+              "useSourceControl": true,
+            }
+            EOF
+            )
           fi
-          
-          # Creates a JSON file to be used as body for the Set Up of the SAST Scan options 
-          Save_FOD_Application_Static_Scan_Options_Body=$(cat <<-EOF
-          {
-            "assessmentTypeId": 274,
-            "entitlementId": 12880,
-            "entitlementFrequencyType": 2,
-            "releaseId": $FOD_Release_ID,
-            "technologyStackId": $Technology_Stack_ID,
-            "technologyStack": "$Technology_Stack",
-            "languageLevelId": $Language_Level_ID,
-            "languageLevel": $Language_Level,
-            "performOpenSourceAnalysis": false,
-            "auditPreferenceType": 2,
-            "includeThirdPartyLibraries": false,
-            "useSourceControl": true,
-          }
-          EOF
-          )
           
           # Echo JSON data to a file named options.json
           echo "$Save_FOD_Application_Static_Scan_Options_Body" > options.json
