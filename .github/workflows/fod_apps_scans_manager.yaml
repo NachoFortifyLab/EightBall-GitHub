@@ -97,7 +97,7 @@ jobs:
     - name: Checks Out the Source Code
       uses: actions/checkout@v3
 
-    # Gets java version and packages options from the java repository   
+    # Gets java version, the builder name and builder data from the java repository   
     - name: "Reads Java Info"
       id: "java_info"
       uses: YunaBraska/java-info-action@main
@@ -126,7 +126,7 @@ jobs:
     needs: [Get-GitHub-Repo-Information, Define-Java-Configuration]
     runs-on: ubuntu-latest
     # Saves the data of the technology stack based on the repository language 
-    # to be used in the sast scan options, sast scan build packages and java configuration steps
+    # to be used in the sast scan options, sast scan build packages and java configuration steps.
     outputs:
       Technology_Stack_ID: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack_id }}
       Technology_Stack: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack }}
@@ -143,7 +143,9 @@ jobs:
     - name: Checks Out the Source Code
       uses: actions/checkout@v3
 
-    # Defines the Java Version to be used for Fortify Tasks
+    # Defines the Java Version to be used for Fortify Tasks.
+    # If the repository language is not Java it will use the default version (Java 8).
+    # If the repository language is Java it will use the java version used to build the code (got from Define-Java-Configuration Job).
     - name: Defines the Java Version for Fortify Tasks
       id: DefinesJavaVersionFortifyTasks
       run: |
@@ -169,7 +171,7 @@ jobs:
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
     
-    # Defines FOD Application Technology Stack based on the language of the repository
+    # Defines FOD Application Technology Stack based on the language of the repository to be used for FOD SAST Scan Options
     - name: Defines FOD Application Technology Stack
       id: DefinesFODAppTechStack
       run: |
@@ -402,7 +404,7 @@ jobs:
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
 
-    # Defines the Java Version to be used for Fortify Tasks
+    # Defines the Java Version to be used for FOD SAST Scan Options
     - name: Defines Java Application Language Level and Language Level ID
       id: DefinesMultiLanguageLevelID
       if: | 
@@ -512,7 +514,9 @@ jobs:
         Repo_Language: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language }}
         Java_Version: ${{ needs.Define-Java-Configuration.outputs.Java_Version }}
 
-    # Checks the Language Level and Level ID for the case of a multi version language and a non multi version language    
+    # Checks the Language Level and Level ID.
+    # If the repository language is a multi version language it will use the corresponding version of the technology stack
+    # based on the data from technology stack configuration.
     - name: Checks Language ID and Language Level of the FOD Application
       id: LanguageLevelIDChecker
       run: |
@@ -775,12 +779,12 @@ jobs:
     - name: Checks Out the Source Code
       uses: actions/checkout@v3
         
-    # Setups FOD SAST Scan options such as Assessment Type, Entitlement, Technology Stack and Audit Preference
+    # Setups FOD SAST Scan options such as Assessment Type, Entitlement, Technology Stack and Audit Preference based on the data obtained on previous jobs.
     # TODO: Update data values from $Save_FOD_Application_Static_Scan_Options_Body (JSON file used as body for the set up the scan options of your FOD application) based on the needs of your FOD application. Helpful hints:
     #   Update ENV variables for your application and create the necessary GitHub Secrets before running the workflow at https://github.com/youraccount/yourrepo/settings/secrets/actions
     #   Credentials and Email should be obtained from your FOD tenant (either Personal Access Token or API Key can be used).
     #   User ID should be obtained from a GET API request to get users list operation at https://api.ams.fortify.com/swagger/ui/index#!/Users/UsersV3_GetUsers.
-    #   FOD Release ID is obtained as output from the FOD Application Management Job.
+    #   FOD Release ID is obtained as output from the FOD-Application-Management Job.
     #   Read fod_apps_scans_manager documentation for more details about how to update the values to be used in the JSON scan options from the application body.
     - name: Setups FOD Static Scan Options for the new Application created
       id: FODAppSastScanOptions
