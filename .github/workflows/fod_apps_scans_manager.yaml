@@ -135,6 +135,8 @@ jobs:
       Scan_Java_Version: ${{ steps.DefinesJavaVersionFortifyTasks.outputs.scan_java_version }}
       Multi_Version_Language_Level_ID: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}
       Multi_Version_Language_Level: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}
+      Language_Level_ID_II: ${{ steps.LanguageLevelIDChecker.outputs.language_level_id }}
+      Language_Level_II: ${{ steps.LanguageLevelIDChecker.outputs.language_level }}
       
     steps:
     # Checks out the source code.
