@@ -130,13 +130,13 @@ jobs:
     outputs:
       Technology_Stack_ID: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack_id }}
       Technology_Stack: ${{ steps.DefinesFODAppTechStack.outputs.tech_stack }}
-      Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
-      Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
-      Scan_Java_Version: ${{ steps.DefinesJavaVersionFortifyTasks.outputs.scan_java_version }}
+      Single_Version_Language_Level_ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}
+      Single_Version_Language_Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}
       Multi_Version_Language_Level_ID: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}
       Multi_Version_Language_Level: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}
-      Language_Level_ID_II: ${{ steps.LanguageLevelIDChecker.outputs.language_level_id }}
-      Language_Level_II: ${{ steps.LanguageLevelIDChecker.outputs.language_level }}
+      Scan_Java_Version: ${{ steps.DefinesJavaVersionFortifyTasks.outputs.scan_java_version }}
+      Language_Level_ID: ${{ steps.LanguageLevelIDChecker.outputs.language_level_id }}
+      Language_Level: ${{ steps.LanguageLevelIDChecker.outputs.language_level }}
       
     steps:
     # Checks out the source code.
@@ -868,8 +868,8 @@ jobs:
         FOD_RELEASE_ID: ${{ needs.FOD-Application-Management.outputs.FOD_Release_ID }}
         Technology_Stack_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack_ID }}
         Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
-        Language_Level_ID: ${{ steps.LanguageLevelIDChecker.outputs.language_level_id }}
-        Language_Level: ${{ steps.LanguageLevelIDChecker.outputs.language_level }}
+        Language_Level_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.language_level_id }}
+        Language_Level: ${{ needs.Repository-Technology-Stack-Management.outputs.language_level }}
         #Multi_Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level_id }}
         #Multi_Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level }}
           
