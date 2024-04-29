@@ -43,7 +43,7 @@ jobs:
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Gets Repository information and extracts the language from the repository info data
     - name: Gets repository information and extracts the language used in the repository
@@ -95,7 +95,7 @@ jobs:
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Gets java version and packages options from the java repository   
     - name: "Reads Java Info"
@@ -141,7 +141,7 @@ jobs:
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Defines the Java Version to be used for Fortify Tasks
     - name: Defines the Java Version for Fortify Tasks
@@ -523,10 +523,6 @@ jobs:
             echo "Repository language is: $Repo_Language"
 
             echo "Language Level and Language Level ID have been saved"
-
-            echo "Language Level ID: ${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}"
-
-            echo "Language Level: ${{ steps.DefinesFODAppTechStack.outputs.language_level }}"
             
             echo "::set-output name=language_level_id::${{ steps.DefinesFODAppTechStack.outputs.language_level_id }}"
             
@@ -535,10 +531,6 @@ jobs:
             echo "Repository language is: $Repo_Language"
 
             echo "Language Level and Language Level ID have been saved"
-
-            echo "Language Level ID: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
-
-            echo "Language Level: ${{ steps.DefinesMultiLanguageLevelID.outputs.language_level }}"
             
             echo "::set-output name=language_level_id::${{ steps.DefinesMultiLanguageLevelID.outputs.language_level_id }}"
             
@@ -563,7 +555,7 @@ jobs:
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       
     # Checks if an application with the repository name exists in your FOD Tenant.
     # if it not exists it will create the application, configure the SAST Scan options
@@ -781,7 +773,7 @@ jobs:
     steps:
     # Checks out the source code.
     - name: Checks Out the Source Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
         
     # Setups FOD SAST Scan options such as Assessment Type, Entitlement, Technology Stack and Audit Preference
     # TODO: Update data values from $Save_FOD_Application_Static_Scan_Options_Body (JSON file used as body for the set up the scan options of your FOD application) based on the needs of your FOD application. Helpful hints:
@@ -794,10 +786,6 @@ jobs:
       id: FODAppSastScanOptions
       run: |
           echo "Proceeding to set up the sast scan options for your ${Repo_Name} Application in Fortify On Demand..."
-
-          echo "Language Level ID: $Language_Level_ID"
-
-          echo "Language Level: $Language_Level"
           
           # Creates a JSON file to be used as body for the Set Up of the SAST Scan options 
           Save_FOD_Application_Static_Scan_Options_Body=$(cat <<-EOF
@@ -870,8 +858,6 @@ jobs:
         Technology_Stack: ${{ needs.Repository-Technology-Stack-Management.outputs.Technology_Stack }}
         Language_Level_ID: ${{ needs.Repository-Technology-Stack-Management.outputs.language_level_id }}
         Language_Level: ${{ needs.Repository-Technology-Stack-Management.outputs.language_level }}
-        #Multi_Language_Level_ID: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level_id }}
-        #Multi_Language_Level: ${{ steps.Repository-Technology-Stack-Management.outputs.multi_language_level }}
           
   # FOD SAST Scan Job
   FOD-SAST-Scan:
