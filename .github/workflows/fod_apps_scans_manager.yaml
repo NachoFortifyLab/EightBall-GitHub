@@ -813,7 +813,7 @@ jobs:
             "performOpenSourceAnalysis": false,
             "auditPreferenceType": 2,
             "includeThirdPartyLibraries": false,
-            "useSourceControl": true,
+            "useSourceControl": false,
           }
           EOF
           )
