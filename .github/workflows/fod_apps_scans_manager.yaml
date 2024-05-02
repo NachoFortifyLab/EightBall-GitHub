@@ -39,6 +39,7 @@ jobs:
     # Saves the data of the repository language to be used in the next jobs
     outputs:
       Repo_Language: ${{ steps.RepoInfo.outputs.repo_language }}
+      Repo_Branch: ${{ steps.RepoInfo.outputs.repo_branch }}
 
     steps:
     # Checks out the source code.
@@ -71,6 +72,8 @@ jobs:
 
           # Prints Repository language  
           echo "The language of the repository is: $LANGUAGE"
+
+          echo "Repository language has been saved"
           
           # Saves the repository information as the output of the current step to be used in next steps
           echo "::set-output name=repo_language::$LANGUAGE"
@@ -89,8 +92,6 @@ jobs:
       Is_Gradle: ${{ steps.java_info.outputs.is_gradle }}
       Is_Maven: ${{ steps.java_info.outputs.is_maven }}
       Builder_Name: ${{ steps.java_info.outputs.builder_name }}
-    # This job will run when language of the repository is Java
-    # if: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Java' }}
     
     steps:
     # Checks out the source code.
@@ -100,6 +101,8 @@ jobs:
     # Gets java version, the builder name and builder data from the java repository   
     - name: "Reads Java Info"
       id: "java_info"
+      # This step will run when the repository language is Java
+      if: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Java' }}
       uses: YunaBraska/java-info-action@main
 
       # Java Configurations (Optional)
@@ -114,6 +117,8 @@ jobs:
 
     # Prints the java info from previous step
     - name: "Prints Java Version Info"
+      # This step will run when the repository language is Java
+      if: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Java' }}
       run: |
           echo "java_version:                     [${{ steps.java_info.outputs.java_version }}]"
           echo "is_gradle:                        [${{ steps.java_info.outputs.is_gradle }}]"
@@ -192,7 +197,7 @@ jobs:
             # Switchs between the non multi version languages and assigns technology stack id and technology stack values based on the repository language
             case "$Repo_Language" in
               "ABAP")
-                echo "The technology Stack from the repository is ABAP"
+                echo "The Technology Stack from the repository is ABAP"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -203,7 +208,7 @@ jobs:
                 echo "::set-output name=tech_stack::ABAP"
                 ;;
               "Apex")
-                echo "The technology Stack from the repository is Apex/VisualForce"
+                echo "The Technology Stack from the repository is Apex/VisualForce"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -214,7 +219,7 @@ jobs:
                 echo "::set-output name=tech_stack::Apex/Visualforce"
                 ;;
               "ColdFusion")
-                echo "The technology Stack from the repository is ColdFusion"
+                echo "The Technology Stack from the repository is ColdFusion"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -225,7 +230,7 @@ jobs:
                 echo "::set-output name=tech_stack::CFML"
                 ;;
               "COBOL")
-                echo "The technology Stack from the repository is COBOL"
+                echo "The Technology Stack from the repository is COBOL"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -236,7 +241,7 @@ jobs:
                 echo "::set-output name=tech_stack::COBOL"
                 ;;
               "Dart")
-                echo "The technology Stack from the repository is Dart"
+                echo "The Technology Stack from the repository is Dart"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -247,7 +252,7 @@ jobs:
                 echo "::set-output name=tech_stack::Dart/Flutter"
                 ;;
               "Go")
-                echo "The technology Stack from the repository is Go"
+                echo "The Technology Stack from the repository is Go"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -258,7 +263,7 @@ jobs:
                 echo "::set-output name=tech_stack::Go"
                 ;;
               "Dockerfile")
-                echo "The technology Stack from the repository is Dockerfile"
+                echo "The Technology Stack from the repository is Dockerfile"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -269,7 +274,7 @@ jobs:
                 echo "::set-output name=tech_stack::Infrastructure-As-Code/Dockerfile"
                 ;;
               "HTML" | "JavaScript" | "TypeScript")
-                echo "The technology Stack from the repository is JS/TS/HTML"
+                echo "The Technology Stack from the repository is JS/TS/HTML"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -280,7 +285,7 @@ jobs:
                 echo "::set-output name=tech_stack::JS/TS/HTML"
                 ;;
               "C" | "C++" | "Scala")
-                echo "The technology Stack from the repository is MBS/C/C++/Scala"
+                echo "The Technology Stack from the repository is MBS/C/C++/Scala"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -291,7 +296,7 @@ jobs:
                 echo "::set-output name=tech_stack::MBS/C/C++/Scala"
                 ;;
               "PHP")
-                echo "The technology Stack from the repository is PHP"
+                echo "The Technology Stack from the repository is PHP"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -302,7 +307,7 @@ jobs:
                 echo "::set-output name=tech_stack::PHP"
                 ;;
               "Ruby")
-                echo "The technology Stack from the repository is Ruby"
+                echo "The Technology Stack from the repository is Ruby"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -313,7 +318,7 @@ jobs:
                 echo "::set-output name=tech_stack::Ruby"
                 ;;
               "Solidity")
-                echo "The technology Stack from the repository is Solidity"
+                echo "The Technology Stack from the repository is Solidity"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -324,7 +329,7 @@ jobs:
                 echo "::set-output name=tech_stack::Solidity"
                 ;;
               "Visual Basic 6.0")
-                echo "The technology Stack from the repository is Visual Basic 6.0"
+                echo "The Technology Stack from the repository is Visual Basic 6.0"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -335,7 +340,7 @@ jobs:
                 echo "::set-output name=tech_stack::VB6"
                 ;;
               "VBScript")
-                echo "The technology Stack from the repository is Visual Basic Script"
+                echo "The Technology Stack from the repository is Visual Basic Script"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -354,7 +359,7 @@ jobs:
           else
             case "$Repo_Language" in
               "Java" | "J2EE" | "Kotlin")
-                echo "The technology Stack from the repository is $Repo_Language"
+                echo "The Technology Stack from the repository is $Repo_Language"
 
                 echo "Technology Stack and Technology Stack ID have been saved"
                 
@@ -365,7 +370,7 @@ jobs:
                 echo "::set-output name=tech_stack::JAVA/J2EE/Kotlin"
                 ;;
               "C#")
-                echo "The technology Stack from the repository is .Net/.Net Core/ASP"
+                echo "The Technology Stack from the repository is .Net/.Net Core/ASP"
 
                 echo "Language Level, Technology Stack, Technology Stack ID and Language Level ID have been saved"
             
@@ -382,7 +387,7 @@ jobs:
                 echo "::set-output name=language_level::2.0"
                 ;;
               "Python")
-                echo "The technology Stack from the repository is Python"
+                echo "The Technology Stack from the repository is Python"
 
                 echo "Technology Stack and Technology Stack ID has been saved"
                 
@@ -407,16 +412,14 @@ jobs:
     # Defines the Java Version to be used for FOD SAST Scan Options
     - name: Defines Java Application Language Level and Language Level ID
       id: DefinesMultiLanguageLevelID
-      if: | 
-         ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Java' }} ||
-         ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Kotlin' }} ||
-         ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'J2EE' }} ||
+      # This step will run when the repository language is Java or Kotlin or J2EE
+      if: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Language == 'Java' }}
       run: |
-          echo "Proceeding to define $Repo_Language version $Java_Version Language Level and ID of the FOD Application..."
+          echo "Proceeding to define $Repo_Language version $Java_Version Language Level and Language ID of the FOD Application..."
           
           case "$Java_Version" in
             "8")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -427,7 +430,7 @@ jobs:
               echo "::set-output name=language_level::1.8"
               ;;
             "9")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -438,7 +441,7 @@ jobs:
               echo "::set-output name=language_level::1.9"
               ;;
             "10")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -449,7 +452,7 @@ jobs:
               echo "::set-output name=language_level::$Java_Version"
               ;;
             "11")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -460,7 +463,7 @@ jobs:
               echo "::set-output name=language_level::$Java_Version"
               ;;
             "12")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -471,7 +474,7 @@ jobs:
               echo "::set-output name=language_level::$Java_Version"
               ;;
             "13")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -482,7 +485,7 @@ jobs:
               echo "::set-output name=language_level::$Java_Version"
               ;;
             "14")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -493,7 +496,7 @@ jobs:
               echo "::set-output name=language_level::$Java_Version"
               ;;
             "17")
-              echo "Java version is $Java_Version"
+              echo "The Java Version of the repository is: $Java_Version"
 
               echo "Language Level and Language Level ID have been saved"
               
@@ -504,7 +507,7 @@ jobs:
               echo "::set-output name=language_level::$Java_Version"
               ;;
             *)
-              echo "Java Version $Java_Version not found on Fortify On Demand language level options"
+              echo "The Java Version $Java_Version has not been found on Fortify On Demand language level options"
 
               exit 1  # Exit with a non-zero status code to indicate failure
               ;;
@@ -516,12 +519,12 @@ jobs:
 
     # Checks the Language Level and Level ID.
     # If the repository language is a multi version language it will use the corresponding version of the technology stack
-    # based on the data from technology stack configuration.
+    # based on the data from technology stack configuration step.
     - name: Checks Language ID and Language Level of the FOD Application
       id: LanguageLevelIDChecker
       run: |
-         echo "Proceeding to check the Language Level and ID of the FOD Application..."
-          
+          echo "Proceeding to check the Language Level and ID of the FOD Application..."
+         
           # Checks if the repositroy language is not a multi version language
           if [[ $Repo_Language != 'Java' && $Repo_Language != 'Kotlin' && $Repo_Language != 'J2EE' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
             echo "Repository language is: $Repo_Language"
@@ -572,8 +575,8 @@ jobs:
     - name: Checks an application existance in FOD and Creates it if not exist
       id: FODAppManagement
       run: |
-          # Prints the repository name
-          echo "The Repository which triggered the workflow is: ${Repo_Name}"
+          # Prints the repository name with branch name
+          echo "This workflow has been triggered at ${Repo_Name} in ${GITHUB_REF##*/} branch"
           
           echo "Proceeding to check if an Application called ${Repo_Name} is present in your Fortify On Demand Tenant..."
           
@@ -583,7 +586,7 @@ jobs:
             "applicationName": "$Repo_Name",
             "applicationDescription": "Created by Fortify On Demand Application and Scan Manager GitHub workflow.",
             "applicationType": "Web_Thick_Client",
-            "releaseName": "1.0",
+            "releaseName": "${GITHUB_REF##*/}",
             "releaseDescription": "Created by Fortify On Demand Application and Scan Manager GitHub workflow.",
             "emailList": "$FOD_EMAIL",
             "ownerId": $FOD_USER_ID,
@@ -762,9 +765,10 @@ jobs:
         FOD_API_URL: "${{ secrets.FOD_API_URL }}"
         FOD_API_TOKEN: "${{ secrets.FOD_BEARER_TOKEN }}"
         Repo_Name: "${{ github.event.repository.name }}"
+        Repo_Branch: ${{ needs.Get-GitHub-Repo-Information.outputs.Repo_Branch }}
         FOD_USER_ID: "${{ secrets.FOD_USER_ID }}"
         FOD_EMAIL: "${{ secrets.FOD_EMAIL }}"
-
+        
   # FOD SAST Scan Options Job
   FOD-SAST-Scan-Options:
     # Indicates that this job requieres FOD Application Management and Repository Technology Stack Management Jobs to be completed in order to run
@@ -906,7 +910,9 @@ jobs:
             
             # Checks if the repository has a language with a builder
             if [[ $Repo_Language != 'Java' && $Repo_Language != 'C#' && $Repo_Language != 'Python' ]]; then
-              echo "The repository language is $Repo_Language which is not a multi version language and has not any builder"
+              echo "The Repository Language is $Repo_Language which is not a multi version language and has not any builder"
+
+              echo "Default Package build has been saved"
               
               # Saves the repository package build as the output to setup the ScanCentral Client package options for FOD SAST Scan (Default)
               echo "::set-output name=repo_package_build::none"
@@ -919,13 +925,17 @@ jobs:
                   echo "Proceeding to check if the repository has a java builder..."
                   
                   if [[ $Is_Gradle == 'true' || $Builder_Name == "Gradle" ]]; then
-                    echo "the Java application has Gradle build"
+                    echo "The Java Application has a Gradle build"
+
+                    echo "Java $Builder_Name build has been saved"
                     
                     # Saves the repository package build as the output to setup the ScanCentral Client package options for FOD SAST Scan (if build is Gradle)
                     echo "::set-output name=repo_package_build::gradle"
                     
                   elif [[ $Is_Maven == "true" || $Builder_Name == "Maven" ]]; then
-                    echo "the Java application has Maven build"
+                    echo "The Java Application has a Maven build"
+
+                    echo "Java $Builder_Name build has been saved"
                     
                     # Saves the repository package build as the output to setup the ScanCentral Client package options for FOD SAST Scan (if build is Maven)
                     echo "::set-output name=repo_package_build::mvn"
@@ -937,6 +947,7 @@ jobs:
                   ;;
                 "Python")
                   echo "The repository language is: Python"
+                  
                   echo "::set-output name=repo_java_version::8"
               
                   echo "::set-output name=repo_package_build::none"
